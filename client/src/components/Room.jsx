@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useState } from "react";
 import ReactPlayer from "react-player";
 import peer from "../service/peer";
 import JoinRoom from "./JoinRoom";
+import Notes from "./Notes";
 
 const RoomPage = ({socket, user, roomId}) => {
   const [remoteSocketId, setRemoteSocketId] = useState(null);
@@ -140,7 +141,8 @@ return (
             url={remoteStream}
           />
         </>
-        )}
+      )}
+      <Notes socket={ socket } />
       </div>
       <div className="w-3/4 bg-blue-200">
         <JoinRoom socket={socket} user={user} roomId={roomId} />

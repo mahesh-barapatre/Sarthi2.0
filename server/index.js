@@ -69,6 +69,18 @@ io.on("connection", (socket) => {
     //console.log("Emitted newDataReceived event to room:", data.roomId);
   });
 
+  //notes socket logic
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  socket.on("contentChange", (newContent) => {
+    // console.log("New content received:", newContent);
+    // Broadcast the new content to all connected clients except the sender
+    socket.broadcast.emit("contentChange", newContent);
+  });
+
+
   //U3IxhA1QeZAC_r5wAABd
 });
 
