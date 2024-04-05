@@ -111,7 +111,7 @@ const RoomPage = ({socket, user, roomId}) => {
 
 return (
   <div className="flex items-center justify-center">
-      <div className="w-1/4 flex flex-col bg-slate-300">
+      <div className="w-1/4 flex flex-col items-center justify-center bg-slate-300">
         <h1>Room Page</h1>
         <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
         <div>
@@ -142,7 +142,10 @@ return (
           />
         </>
       )}
+      <div className="m-1 w-full">
+
       <Notes socket={ socket } />
+      </div>
       </div>
       <div className="w-3/4 bg-blue-200">
         <JoinRoom socket={socket} user={user} roomId={roomId} />

@@ -25,14 +25,14 @@ function Notes({ socket }) {
     };
 
    return (
-    <div className="notepad">
-      <textarea
-        className="notepad-content"
-        value={content}
-        onChange={handleInputChange}
-        placeholder="Start typing..."
-      />
-    </div>
+     <div className="notepad bg-gray-900 w-full h-24 m-2">
+            <textarea
+                className="notepad-content bg-gray-900 text-white p-4 w-full h-full resize-none border-none"
+                value={content}
+                onChange={handleInputChange}
+                placeholder="Start typing..."
+            />
+        </div>
   );
 }
 
