@@ -111,43 +111,59 @@ const RoomPage = ({socket, user, roomId}) => {
 
 return (
   <div className="flex items-center justify-center">
-      <div className="w-1/4 flex flex-col items-center justify-center bg-slate-300">
-        <h1>Room Page</h1>
-        <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
-        <div>
-          {myStream && <button onClick={sendStreams}>Send Stream</button>}
-          {remoteSocketId && <button onClick={handleCallUser}>CALL</button>}
-        </div>
-        {myStream && (
-          <>
-          <h1>My Stream</h1>
-          <ReactPlayer
-            playing
-            muted
-            height="100px"
-            width="200px"
-            url={myStream}
-          />
-        </>
-        )}
-        {remoteStream && (
-           <>
-          <h1>Remote Stream</h1>
-          <ReactPlayer
-            playing
-            muted
-            height="100px"
-            width="200px"
-            url={remoteStream}
-          />
-        </>
-      )}
-      <div className="m-1 w-full">
+      <div className="w-1/4 h-screen flex flex-col items-center justify-around">
+      {/* <h1>Room Page</h1> */}
+    <div className="p-4 border shadow-md transition-transform transform hover:shadow-lg bg-gray-100 hover:bg-gray-200 rounded-lg">
+  <h4 className="font-bold text-xl">{remoteSocketId ? "Connected" : "No one in room"}</h4>
+  <div className="mt-4 space-x-2">
+    {myStream && <button onClick={sendStreams} className="button bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Send Stream</button>}
+    {remoteSocketId && <button onClick={handleCallUser} className="button bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Call</button>}
+  </div>
+  {myStream && (
+    <div className="mt-4">
+      <h1 className="text-lg font-bold">My Stream</h1>
+      <ReactPlayer
+        playing
+        muted
+        height="100px"
+        width="200px"
+        url={myStream}
+      />
+    </div>
+  )}
+  {remoteStream && (
+    <div className="mt-4">
+      <h1 className="text-lg font-bold">Remote Stream</h1>
+      <ReactPlayer
+        playing
+        muted
+        height="100px"
+        width="200px"
+        url={remoteStream}
+      />
+    </div>
+  )}
+</div>
 
-      <Notes socket={ socket } />
+
+      <div className="w-full text-center">
+            <button className="font-bold border-black cursor-pointer border-2 px-2 py-1 transition-transform transform shadow-md hover:shadow-lg bg-slate-50 hover:bg-gray-200">
+      WhiteBoard
+    </button>
+            <button className="font-bold border-black cursor-pointer border-2 px-2 py-1 transition-transform transform shadow-md hover:shadow-lg bg-slate-50 hover:bg-gray-200">
+      Code Editor
+    </button>
+            <button className="font-bold border-black cursor-pointer border-2 px-2 py-1 transition-transform transform shadow-md hover:shadow-lg bg-slate-50 hover:bg-gray-200">
+      Leetcode daily
+    </button>
+            <button className="font-bold border-black cursor-pointer border-2 px-2 py-1 transition-transform transform shadow-md hover:shadow-lg bg-slate-50 hover:bg-gray-200">
+      gfg potd
+    </button>
+      {/* <Notes socket={ socket } /> */}
       </div>
       </div>
-      <div className="w-3/4 bg-blue-200">
+      <div className="w-3/4 h-screen flex justify-center items-center">
+      {/* <Notes socket={ socket } /> */}
         <JoinRoom socket={socket} user={user} roomId={roomId} />
       </div>
   

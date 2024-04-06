@@ -30,7 +30,8 @@ const WhiteBoard = ({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    canvas.height = window.innerHeight * 2;
+    // canvas.height = window.innerHeight * 2;
+    canvas.height = window.innerHeight * 0.7;
     canvas.width = window.innerWidth * 2;
     const ctx = canvas.getContext("2d");
     ctx.strokeStyle = color;

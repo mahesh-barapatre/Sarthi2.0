@@ -25,14 +25,15 @@ function Notes({ socket }) {
     };
 
    return (
-     <div className="notepad bg-gray-900 w-full h-24 m-2">
-            <textarea
-                className="notepad-content bg-gray-900 text-white p-4 w-full h-full resize-none border-none"
-                value={content}
-                onChange={handleInputChange}
-                placeholder="Start typing..."
-            />
-        </div>
+    <div class="notepad bg-gray-100 h-3/4 w-3/4 rounded-lg shadow-md hover:shadow-lg">
+  <textarea
+    class="notepad-content bg-transparent text-gray-800 w-full h-full p-4 resize-none outline-none"
+    value={content}
+    onChange={handleInputChange}
+    placeholder="Start typing..."
+  ></textarea>
+</div>
+
   );
 }
 
