@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 const { Server } = require("socket.io");
 
@@ -14,20 +15,109 @@ const io = new Server(server, {
   },
 });
 
-//Route
-// let roomGlobal, curr;
+// Body parser middleware
+app.use(express.json());
+app.use(cors());
+
+// MongoDB connection
+const mongoURI = 'mongodb+srv://maheshbarapatre14:maheshAtlas2023@cluster0.tkhncfb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log(err));
+
+// Define a Mongoose Schema
+const Schema = mongoose.Schema;
+
+const ImgSchema = mongoose.Schema({
+  name: {
+    type: String,
+  },
+  url:[
+     {
+    type: String,
+    }
+  ]
+})
+
+const imgSchema = mongoose.model('ImgSchema', ImgSchema);
+
+app.get('/images', async(req, res) => {
+  try {
+    let data = await imgSchema.find();
+    res.status(200).json(data);
+  } catch (error) {
+    // console.log(error.message);
+    res.status(500).send('server error: ' + error.message);
+  }
+})
+
+app.post('/images', async (req, res) => { 
+  try {
+    const { name, imgs } = req.body;
+    const questions = {
+      name: name,
+      url: imgs
+    }
+
+    await imgSchema.create(questions);
+    res.status(200).send('added successfully');
+    
+  } catch (error) {
+    res.status(500).send('server error: ' + error.message);
+  }
+})
+
+
+const RoomSchema = new Schema({
+  num: {
+    type: Number,
+    required: true
+  }
+});
+
+// Create a Mongoose model
+const fullRoom = mongoose.model('fullRoom', RoomSchema);
+const vacantRoom = mongoose.model('vacantRoom', RoomSchema);
+
+// Define routes
+
+// Sample route - Get all samples
+app.get('/check', async (req, res) => {
+  try {
+    // Check if there are any vacant rooms
+    const vacantRooms = await vacantRoom.find();
+    if (vacantRooms.length > 0) {
+      // If there are vacant rooms, take out the first one
+      const roomNum = vacantRooms[0].num;
+
+      // Remove the room from vacantRoom collection
+      await vacantRoom.findOneAndDelete({ num: roomNum });
+
+      // Add the room to fullRoom collection
+      await fullRoom.create({ num: roomNum });
+
+      // Return the room number
+      res.json({ roomNum });
+    } else {
+      // If there are no vacant rooms, generate a random room number
+      const randomRoomNum = Math.floor(Math.random() * 100) + 1; // Generate a random number between 1 and 100
+
+      // Add the random room number to vacantRoom collection
+      await vacantRoom.create({ num: randomRoomNum });
+
+      // Return the random room number
+      res.json({ roomNum: randomRoomNum });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
 io.on("connection", (socket) => {
 
-
-  console.log(`Socket Connected`, socket.id);
-  // socket.on("room:join", (data) => {
-  //   const { name, roomId } = data;
-  //   // emailToSocketIdMap.set(email, socket.id);
-  //   // socketidToEmailMap.set(socket.id, email);
-  //   io.to(room).emit("user:joined", { name, id: socket.id });
-  //   socket.join(roomId);
-  //   io.to(socket.id).emit("room:join", data);
-  // });
+  // console.log(`Socket Connected`, socket.id);
   socket.on("userJoined", (data) => {
     const { name, userId, roomId, host, presenter } = data;
     io.to(roomId).emit("user:joined", { name, id: socket.id });
@@ -55,8 +145,6 @@ io.on("connection", (socket) => {
   });
 
 
-
-
   let room, name;
   socket.on("newData", (data) => {
     console.log(data.roomId);
@@ -66,7 +154,6 @@ io.on("connection", (socket) => {
       name: data.name,
       pic: data.pic,
     });
-    //console.log("Emitted newDataReceived event to room:", data.roomId);
   });
 
   //notes socket logic
@@ -75,44 +162,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("contentChange", (newContent) => {
-    // console.log("New content received:", newContent);
-    // Broadcast the new content to all connected clients except the sender
     socket.broadcast.emit("contentChange", newContent);
   });
 
-
-  //U3IxhA1QeZAC_r5wAABd
 });
 
-// const emailToSocketIdMap = new Map();
-// const socketidToEmailMap = new Map();
-
-// io.on("connection", (socket) => {
-//   console.log(`Socket Connected`, socket.id);
-//   socket.on("room:join", (data) => {
-//     const { email, room } = data;
-//     // emailToSocketIdMap.set(email, socket.id);
-//     // socketidToEmailMap.set(socket.id, email);
-//     io.to(room).emit("user:joined", { email, id: socket.id });
-//     socket.join(room);
-//     io.to(socket.id).emit("room:join", data);
-//   });
-
-//   socket.on("user:call", ({ to, offer }) => {
-//     io.to(to).emit("incomming:call", { from: socket.id, offer });
-//   });
-
-//   socket.on("call:accepted", ({ to, ans }) => {
-//     io.to(to).emit("call:accepted", { from: socket.id, ans });
-//   });
-
-//   socket.on("peer:nego:needed", ({ to, offer }) => {
-//     console.log("peer:nego:needed", offer);
-//     io.to(to).emit("peer:nego:needed", { from: socket.id, offer });
-//   });
-
-//   socket.on("peer:nego:done", ({ to, ans }) => {
-//     console.log("peer:nego:done", ans);
-//     io.to(to).emit("peer:nego:final", { from: socket.id, ans });
-//   });
-// });

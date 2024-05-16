@@ -3,6 +3,8 @@ import ReactPlayer from "react-player";
 import peer from "../service/peer";
 import JoinRoom from "./JoinRoom";
 import Notes from "./Notes";
+import Questions from "./Questions";
+import { NavHashLink as NavLink } from 'react-router-hash-link';
 
 const RoomPage = ({socket, user, roomId}) => {
   const [remoteSocketId, setRemoteSocketId] = useState(null);
@@ -109,46 +111,102 @@ const RoomPage = ({socket, user, roomId}) => {
     handleNegoNeedFinal,
   ]);
 
+  const [sec, setSec] = useState("wb");
+
+  const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+
 return (
   <div className="flex items-center justify-center">
-      <div className="w-1/4 flex flex-col items-center justify-center bg-slate-300">
-        <h1>Room Page</h1>
-        <h4>{remoteSocketId ? "Connected" : "No one in room"}</h4>
-        <div>
-          {myStream && <button onClick={sendStreams}>Send Stream</button>}
-          {remoteSocketId && <button onClick={handleCallUser}>CALL</button>}
-        </div>
+      <div className="w-1/4 h-screen flex flex-col items-center justify-around">
+      {/* <h1>Room Page</h1> */}
+    <div className="p-4 border shadow-md transition-transform transform hover:shadow-lg bg-gray-100 hover:bg-gray-200 rounded-lg">
+  <h4 className="font-bold text-xl">{remoteSocketId ? "Connected" : "No one in room"}</h4>
+  <div className="mt-4 space-x-2">
+    {myStream && <button onClick={sendStreams} className="button bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Send Stream</button>}
+    {remoteSocketId && <button onClick={handleCallUser} className="button bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">Call</button>}
+  </div>
+  
+        
         {myStream && (
-          <>
-          <h1>My Stream</h1>
-          <ReactPlayer
-            playing
-            muted
-            height="100px"
-            width="200px"
-            url={myStream}
-          />
-        </>
-        )}
-        {remoteStream && (
-           <>
-          <h1>Remote Stream</h1>
-          <ReactPlayer
-            playing
-            muted
-            height="100px"
-            width="200px"
-            url={remoteStream}
-          />
-        </>
-      )}
-      <div className="m-1 w-full">
+    <div className="mt-4">
+      <h1 className="text-lg font-bold">My Stream</h1>
+      <ReactPlayer
+        playing = {isPlaying}   // The video is set to play automatically
+        muted = {isMuted}    // The video is muted by default
+        height="100px"
+        width="200px"
+        url={myStream}  // The URL of the video stream
+      />
+      <div className="mt-4">
+        <button 
+          className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={() => setIsMuted((prev)=>!prev)}>
+          {isMuted ? 'Unmute' : 'Mute'}
+        </button>
+        <button 
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={() => setIsPlaying((prev)=>!prev)}>
+          {isPlaying ? 'Pause' : 'Play'}
+        </button>
+      </div>
+    </div>
+)}
 
+
+  {remoteStream && (
+    <div className="mt-4">
+      <h1 className="text-lg font-bold">Remote Stream</h1>
+      <ReactPlayer
+        playing
+        muted 
+        height="100px"
+        width="200px"
+        url={remoteStream}
+      />
+    </div>
+  )}
+</div>
+
+
+      <div className="w-full text-center">
+        <NavLink to={`/${roomId}/#whiteboard`}>
+        <button
+    className="font-bold border-black cursor-pointer border-2 px-2 py-1 transition-transform transform shadow-md hover:shadow-lg bg-slate-50 hover:bg-gray-200">
+      WhiteBoard
+    </button>
+        </NavLink>
+        <NavLink to={`/${roomId}/#notes`}>
+
+        <button
+          
+          className="font-bold border-black cursor-pointer border-2 px-2 py-1 transition-transform transform shadow-md hover:shadow-lg bg-slate-50 hover:bg-gray-200">
+      Code Editor
+    </button>
+        </NavLink>
+        <NavLink to={`/${roomId}/#leetcode`}>
+
+        <button
+          
+          className="font-bold border-black cursor-pointer border-2 px-2 py-1 transition-transform transform shadow-md hover:shadow-lg bg-slate-50 hover:bg-gray-200">
+      Leetcode daily
+    </button>
+        </NavLink>
+        <NavLink to={`/${roomId}/#gfg`}>
+
+        <button
+          
+          className="font-bold border-black cursor-pointer border-2 px-2 py-1 transition-transform transform shadow-md hover:shadow-lg bg-slate-50 hover:bg-gray-200">
+      gfg potd
+    </button>
+        </NavLink>
+      </div>
+      </div>
+    <div className="w-3/4 overflow-auto h-screen justify-center items-center">
+      <JoinRoom socket={socket} user={user} roomId={roomId} />
       <Notes socket={ socket } />
-      </div>
-      </div>
-      <div className="w-3/4 bg-blue-200">
-        <JoinRoom socket={socket} user={user} roomId={roomId} />
+      <Questions />
+      
       </div>
   
   </div>
