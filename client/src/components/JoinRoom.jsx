@@ -43,7 +43,7 @@ const JoinRoom = ({socket,user,roomId}) => {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div id="whiteboard" className="w-full h-screen flex flex-col">
   <div className="flex justify-between items-center mt-10 mx-10">
     <div className="flex flex-col gap-5 mx-5 xl:flex-row text-xl">
       <ToolRadioButton tool="pencil" currentTool={tool} setTool={setTool}>Pencil</ToolRadioButton>

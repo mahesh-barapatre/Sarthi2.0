@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import io from "socket.io-client";
 const server = "http://localhost:5000";
 
@@ -13,6 +14,7 @@ const CreateRoom = ({ setUser, socket, setRoomIdProp }) => {
   const [nameJoin, setNameJoin] = useState("");
 
   const handleRoomJoin = (e) => {
+
     if (!nameJoin || !joinRoom) return;
 
     e.preventDefault();
@@ -22,6 +24,18 @@ const CreateRoom = ({ setUser, socket, setRoomIdProp }) => {
     setUser(nameJoin);
     setRoomIdProp(joinRoom);
     navig(`/${joinRoom}`);
+  };
+
+  const joinGlobal = async(e) => {
+    e.preventDefault();
+    const roomNum = await axios.get("http://localhost:5000/check");
+    console.log(roomNum.data.roomNum);
+    socket.emit("userJoined", {
+      roomId: roomNum.data.roomNum,
+    });
+    setUser(nameJoin);
+    setRoomIdProp(roomNum.data.roomNum);
+    navig(`/${roomNum.data.roomNum}`);
   };
 
 
@@ -55,6 +69,12 @@ const CreateRoom = ({ setUser, socket, setRoomIdProp }) => {
         className="btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded transition-all duration-300"
       >
         Join Room
+      </button>
+      <button
+        onClick={joinGlobal}
+        className="btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded transition-all duration-300"
+      >
+        Global Join
       </button>
     </form>
   </div>
