@@ -113,8 +113,10 @@ const RoomPage = ({socket, user, roomId}) => {
 
   const [sec, setSec] = useState("wb");
 
-  const [isMuted, setIsMuted] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMutedmyStream, setIsMutedmyStream] = useState(true);
+  const [isPlayingmyStream, setIsPlayingmyStream] = useState(true);
+  const [isMutedremoteStream, setIsMutedremoteStream] = useState(true);
+  const [isPlayingremoteStream, setIsPlayingremoteStream] = useState(true);
 
 return (
   <div className="flex items-center justify-center">
@@ -132,8 +134,8 @@ return (
     <div className="mt-4">
       <h1 className="text-lg font-bold">My Stream</h1>
       <ReactPlayer
-        playing = {isPlaying}   // The video is set to play automatically
-        muted = {isMuted}    // The video is muted by default
+        playing = {isPlayingmyStream}   // The video is set to play automatically
+        muted = {isMutedmyStream}    // The video is muted by default
         height="100px"
         width="200px"
         url={myStream}  // The URL of the video stream
@@ -141,13 +143,13 @@ return (
       <div className="mt-4">
         <button 
           className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={() => setIsMuted((prev)=>!prev)}>
-          {isMuted ? 'Unmute' : 'Mute'}
+          onClick={() => setIsMutedmyStream((prev)=>!prev)}>
+          {isMutedmyStream ? 'Unmute' : 'Mute'}
         </button>
         <button 
           className="px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={() => setIsPlaying((prev)=>!prev)}>
-          {isPlaying ? 'Pause' : 'Play'}
+          onClick={() => setIsPlayingmyStream((prev)=>!prev)}>
+          {isPlayingmyStream ? 'Pause' : 'Play'}
         </button>
       </div>
     </div>
@@ -158,14 +160,30 @@ return (
     <div className="mt-4">
       <h1 className="text-lg font-bold">Remote Stream</h1>
       <ReactPlayer
-        playing
-        muted 
+        playing = {isPlayingremoteStream}
+        muted = {isPlayingremoteStream}
         height="100px"
         width="200px"
         url={remoteStream}
-      />
-    </div>
-  )}
+            />
+
+            <div className="mt-4">
+        <button 
+          className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={() => setIsMutedremoteStream((prev)=>!prev)}>
+          {isMutedremoteStream ? 'Unmute' : 'Mute'}
+        </button>
+        <button 
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={() => setIsPlayingremoteStream((prev)=>!prev)}>
+          {isPlayingremoteStream ? 'Pause' : 'Play'}
+        </button>
+      </div>
+            
+      </div>
+          
+        )}
+        
 </div>
 
 
@@ -205,7 +223,8 @@ return (
     <div className="w-3/4 overflow-auto h-screen justify-center items-center">
       <JoinRoom socket={socket} user={user} roomId={roomId} />
       <Notes socket={ socket } />
-      <Questions />
+      <Questions id={'leetcode'} type={'lc'} />
+      <Questions id={'gfg'} type={'gfg'} />
       
       </div>
   

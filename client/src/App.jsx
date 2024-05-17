@@ -6,8 +6,8 @@ import { Route, Routes } from "react-router-dom";
 import JoinRoom from "./components/JoinRoom";
 import io from "socket.io-client";
 import RoomPage from "./components/Room";
-// const servers = "http://localhost:5000";
-const servers = "https://sarthi-1.onrender.com";
+// const server = "http://localhost:5000";
+const server = "https://sarthi-1.onrender.com";
 
 function App() {
   const socket = useMemo(() => io(servers), []);
@@ -22,6 +22,7 @@ function App() {
           path="/"
           element={
             <CreateRoom
+              server = {server}
               socket={socket}
               setUser={setUser}
               setRoomIdProp={setRoomId}
