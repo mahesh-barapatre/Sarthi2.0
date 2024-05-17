@@ -62,7 +62,7 @@ const JoinRoom = ({socket,user,roomId}) => {
     </div>
     <div className="flex ml-4 gap-3">
       <Button onClick={undo} className="bg-blue-500 text-white w-24 h-10 rounded-lg">Undo</Button>
-      <Button onClick={Redo} className="border border-blue-500 text-blue-500 w-24 h-10 rounded-lg">Redo</Button>
+      {/* <Button onClick={Redo} className="border border-blue-500 text-blue-500 w-24 h-10 rounded-lg">Redo</Button> */}
       <Button onClick={clearCanvas} className="bg-red-600 text-white w-32 h-10 rounded-lg">Clear Canvas</Button>
     </div>
   </div>

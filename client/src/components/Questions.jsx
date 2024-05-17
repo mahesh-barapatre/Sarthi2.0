@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
 
-const Questions = () => {
-  const imageUrls = [
-    'https://wallpapers.com/images/featured/4k-oaax18kaapkokaro.jpg',
-    'https://wallpapercave.com/wp/wp4626258.jpg'
+const Questions = ({type , id}) => {
+  const lc = [
+    'https://i.pinimg.com/originals/4d/23/55/4d235549611bdc51e15f6e49486986e0.jpg',
+    'https://i.pinimg.com/originals/c3/fd/94/c3fd94d3218e668cff25528a54dca319.jpg'
   ];
+  const gfg = [
+    'https://i.pinimg.com/originals/06/88/0d/06880d86d672bbc0ef65408531ec8d95.jpg',
+    'https://i.pinimg.com/originals/d6/04/6c/d6046cfbacbd83261019993c647ee224.jpg'
+  ];
+
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const changeImg = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % lc.length);
   };
 
   return (
-   <div className="bg-gray-100 h-screen p-4 rounded-md shadow-md relative w-full">
+   <div id={id} className="bg-gray-100 h-screen p-4 rounded-md shadow-md relative w-full">
   <img
-    src={imageUrls[currentImageIndex]}
+        // src={imageUrls[currentImageIndex]}
+        src = {type === 'lc' ? lc[currentImageIndex] : gfg[currentImageIndex]}
     alt="Question"
     className="mx-auto rounded-md"
   />

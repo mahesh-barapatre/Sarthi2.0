@@ -25,9 +25,9 @@ function Notes({ socket }) {
     };
 
    return (
-    <div id='notes' class="w-full h-screen bg-gray-100 rounded-lg shadow-md hover:shadow-lg">
+    <div id='notes' className="w-full h-screen bg-gray-100 rounded-lg shadow-md hover:shadow-lg">
   <textarea
-    class="notepad-content bg-transparent text-gray-800 w-full h-full p-4 resize-none outline-none"
+    className="notepad-content bg-transparent text-gray-800 w-full h-full p-4 resize-none outline-none"
     value={content}
     onChange={handleInputChange}
     placeholder="Start typing..."

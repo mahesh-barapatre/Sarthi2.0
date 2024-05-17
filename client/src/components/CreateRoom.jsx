@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import io from "socket.io-client";
-const server = "http://localhost:5000";
+// const server = "http://localhost:5000";
 
 // var randomToken = require("random-token");
 
-const CreateRoom = ({ setUser, socket, setRoomIdProp }) => {
+const CreateRoom = ({ setUser, socket, setRoomIdProp, server }) => {
   const navig = useNavigate();
   const [roomId, setRoomId] = useState("");
   const [joinRoom, setJoinRoom] = useState();
@@ -28,7 +28,7 @@ const CreateRoom = ({ setUser, socket, setRoomIdProp }) => {
 
   const joinGlobal = async(e) => {
     e.preventDefault();
-    const roomNum = await axios.get("http://localhost:5000/check");
+    const roomNum = await axios.get(`${server}/check`);
     console.log(roomNum.data.roomNum);
     socket.emit("userJoined", {
       roomId: roomNum.data.roomNum,
