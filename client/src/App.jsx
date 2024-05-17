@@ -10,7 +10,7 @@ import RoomPage from "./components/Room";
 const server = "https://sarthi-1.onrender.com";
 
 function App() {
-  const socket = useMemo(() => io(servers), []);
+  const socket = useMemo(() => io(server), []);
   const [darkMode, setDarkMode] = useState(false);
   const [user, setUser] = useState("");
   const [roomId, setRoomId] = useState(null);
