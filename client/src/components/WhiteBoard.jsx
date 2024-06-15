@@ -13,6 +13,10 @@ const WhiteBoard = ({
   user,
   roomId,
 }) => {
+  console.log("whiteboard:");
+  console.log(user);
+  console.log(socket);
+  console.log(roomId);
   const [isDrawing, setIsDrawing] = useState(false);
   const [rip, setRip] = useState(true); // If it true, then last update was true
   const ctxRef = useRef(null);

@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
+require('dotenv').config();
 
 const { Server } = require("socket.io");
 
@@ -12,15 +13,17 @@ const server = app.listen(5000, () => {
 const io = new Server(server, {
   cors: {
     origin: "*",
-  },
+  }, 
 });
+
+const mongoURI = process.env.mongoURI || "mongodb+srv://maheshbarapatre14:maheshAtlas2023@cluster0.tkhncfb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Body parser middleware
 app.use(express.json());
 app.use(cors());
 
 // MongoDB connection
-const mongoURI = 'mongodb+srv://maheshbarapatre14:maheshAtlas2023@cluster0.tkhncfb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
@@ -69,17 +72,31 @@ app.post('/images', async (req, res) => {
 
 
 const RoomSchema = new Schema({
-  num: {
-    type: Number,
+  id: {
+    type: String,
     required: true
   }
 });
 
 // Create a Mongoose model
-const fullRoom = mongoose.model('fullRoom', RoomSchema);
+// const fullRoom = mongoose.model('fullRoom', RoomSchema);
 const vacantRoom = mongoose.model('vacantRoom', RoomSchema);
 
 // Define routes
+
+//Code to generate random number
+const generateHexId = (length) => {
+  const hexChars = '0123456789abcdef#&$%';
+  console.log('1');
+  let hexId = '';
+  console.log('1');
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * hexChars.length);
+    hexId += hexChars[randomIndex];
+  }
+  console.log('1');
+  return hexId;
+}
 
 // Sample route - Get all samples
 app.get('/check', async (req, res) => {
@@ -88,25 +105,23 @@ app.get('/check', async (req, res) => {
     const vacantRooms = await vacantRoom.find();
     if (vacantRooms.length > 0) {
       // If there are vacant rooms, take out the first one
-      const roomNum = vacantRooms[0].num;
+      const roomId = vacantRooms[0].id;
 
       // Remove the room from vacantRoom collection
-      await vacantRoom.findOneAndDelete({ num: roomNum });
-
-      // Add the room to fullRoom collection
-      await fullRoom.create({ num: roomNum });
+      await vacantRoom.findOneAndDelete({ id: roomId });
 
       // Return the room number
-      res.json({ roomNum });
+      res.json({ roomId });
     } else {
-      // If there are no vacant rooms, generate a random room number
-      const randomRoomNum = Math.floor(Math.random() * 100) + 1; // Generate a random number between 1 and 100
+      // If there are no vacant rooms, generate a random room id
+      const randomRoomId = generateHexId(8); // Generate a random id
+      console.log(randomRoomId);
 
       // Add the random room number to vacantRoom collection
-      await vacantRoom.create({ num: randomRoomNum });
+      await vacantRoom.create({ id: randomRoomId });
 
       // Return the random room number
-      res.json({ roomNum: randomRoomNum });
+      res.json({ roomId : randomRoomId });
     }
   } catch (err) {
     console.error(err.message);
