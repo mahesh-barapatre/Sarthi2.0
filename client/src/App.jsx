@@ -16,7 +16,7 @@ function App() {
   const [roomId, setRoomId] = useState(null);
 
   return (
-    <div className= "bg-gray-200">
+    <div className= "bg-blue-50">
       <Routes>
         <Route
           path="/"

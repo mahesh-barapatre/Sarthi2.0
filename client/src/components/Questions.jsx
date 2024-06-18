@@ -18,22 +18,22 @@ const Questions = ({type , id}) => {
   };
 
   return (
-   <div id={id} className="bg-gray-100 h-screen p-4 rounded-md shadow-md relative w-full">
-  <img
-        // src={imageUrls[currentImageIndex]}
-        src = {type === 'lc' ? lc[currentImageIndex] : gfg[currentImageIndex]}
-    alt="Question"
-    className="mx-auto rounded-md"
-  />
-  <button
-    onClick={changeImg}
-    className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
-  >
-    {">"}
-  </button>
-</div>
-
-
+    <div id={id} className="bg-blue-200 sm:min-h-screen rounded-md shadow-lg w-full flex flex-col items-center">
+      <h1 className="text-3xl font-bold text-blue-900 uppercase my-4">{id} potd</h1>
+      <div className="relative w-full bg-blue-300 rounded-md shadow-md">
+        <img
+          src={type === 'lc' ? lc[currentImageIndex] : gfg[currentImageIndex]}
+          alt="Question"
+          className="mx-auto rounded-md max-h-full object-contain"
+        />
+        <button
+          onClick={changeImg}
+          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+        >
+          {">"}
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -43,8 +43,8 @@ const JoinRoom = ({socket,user,roomId}) => {
   };
 
   return (
-    <div id="whiteboard" className="w-full h-screen flex flex-col">
-  <div className="flex justify-between items-center mt-10 mx-10">
+    <div id="whiteboard" className="w-full bg-red-600 h-screen overflow-hidden flex flex-col">
+  <div className="flex justify-between items-center border-gray-300 border-2 bg-gray-100 p-3 shadow-lg">
     <div className="flex flex-col gap-5 mx-5 xl:flex-row text-xl">
       <ToolRadioButton tool="pencil" currentTool={tool} setTool={setTool}>Pencil</ToolRadioButton>
       <ToolRadioButton tool="line" currentTool={tool} setTool={setTool}>Line</ToolRadioButton>
@@ -66,7 +66,7 @@ const JoinRoom = ({socket,user,roomId}) => {
       <Button onClick={clearCanvas} className="bg-red-600 text-white w-32 h-10 rounded-lg">Clear Canvas</Button>
     </div>
   </div>
-  <div className="w-11/12 mx-auto mt-10 border-2 border-black">
+  <div className="">
     <WhiteBoard
       socket={socket}
       user={user}
@@ -77,7 +77,7 @@ const JoinRoom = ({socket,user,roomId}) => {
       tool={tool}
       color={color}
       roomId={roomId}
-      className="border-2 border-black w-full"
+      className=""
     />
   </div>
 </div>
