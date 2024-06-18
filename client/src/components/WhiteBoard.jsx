@@ -35,7 +35,7 @@ const WhiteBoard = ({
   useEffect(() => {
     const canvas = canvasRef.current;
     // canvas.height = window.innerHeight * 2;
-    canvas.height = window.innerHeight * 0.7;
+    canvas.height = window.innerHeight * 1;
     canvas.width = window.innerWidth * 2;
     const ctx = canvas.getContext("2d");
     ctx.strokeStyle = color;
@@ -203,7 +203,7 @@ const WhiteBoard = ({
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
-      className="h-[100%] w-[100%] overflow-hidden"
+      className="bg-white"
     >
       <canvas ref={canvasRef} />
     </div>
