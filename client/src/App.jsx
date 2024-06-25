@@ -6,8 +6,9 @@ import { Route, Routes } from "react-router-dom";
 import JoinRoom from "./components/JoinRoom";
 import io from "socket.io-client";
 import RoomPage from "./components/Room";
-// const server = "http://localhost:5000";
-const server = "https://sarthi-1.onrender.com";
+import Admin from "./pages/Admin";
+const server = "http://localhost:5000";
+// const server = "https://sarthi-1.onrender.com";
 
 function App() {
   const socket = useMemo(() => io(server), []);
@@ -37,6 +38,10 @@ function App() {
           path="/:roomId"
           element={<RoomPage socket={socket} user={user} roomId={roomId} />}
         />
+      <Route 
+        path="/admin"
+        element={<Admin/>}
+      />
       </Routes>
     </div>
   );

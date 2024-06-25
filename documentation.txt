@@ -1,12 +1,11 @@
 modification - 
-1. leetcode api insertion
-2. global join according to leetcode ratings
-3. admin route to change daily questions
-4. select question for user to discuss
-5. mute/unmute option
-6. sharing documents/files
-7. emojis
-8. polls
-9. personal avatar
-10. login/profile
-11. 
+
+2. global join according to leetcode ratings --
+3. admin route to change daily questions --
+
+5. mute/unmute option --
+
+9. personal avatar --
+
+11. ai demo (solo demo) --
+12. audio bug --

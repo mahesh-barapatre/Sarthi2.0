@@ -42,9 +42,16 @@ const RoomPage = ({socket, user, roomId}) => {
   );
 
   const sendStreams = useCallback(() => {
-    for (const track of myStream.getTracks()) {
+    // for (const track of myStream.getTracks()) {
+    //   console.log("this is my Stream", myStream.getTracks());
+    //   console.log(track);
+      // peer.peer.addTrack(track, myStream);
+    // }
+    myStream.getTracks().forEach(track => {
+      console.log(track);
+      console.log(myStream);
       peer.peer.addTrack(track, myStream);
-    }
+    });
   }, [myStream]);
 
   const handleCallAccepted = useCallback(
@@ -82,8 +89,10 @@ const RoomPage = ({socket, user, roomId}) => {
 
   useEffect(() => {
     peer.peer.addEventListener("track", async (ev) => {
+      console.log(ev);
       const remoteStream = ev.streams;
       console.log("GOT TRACKS!!");
+      console.log(remoteStream);
       setRemoteStream(remoteStream[0]);
     });
   }, []);
