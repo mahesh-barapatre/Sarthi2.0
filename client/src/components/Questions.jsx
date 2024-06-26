@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-const Questions = ({type , id}) => {
+const Questions = ({type , id, server}) => {
 
   const getQuestion = async () => {
     try {

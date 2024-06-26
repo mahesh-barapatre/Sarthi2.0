@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Admin = () => {
+const Admin = ({server}) => {
   const navig = useNavigate();
   const [lcUrl1, setLcUrl1] = useState('');
   const [lcUrl2, setLcUrl2] = useState('');
@@ -12,11 +12,11 @@ const Admin = () => {
 
   const update = async () => {
     try {
-      const r1 = await axios.post('http://localhost:5000/images/lc', {
+      const r1 = await axios.post(`${server}/images/lc`, {
         imgsUrl : [lcUrl1, lcUrl2],
       });
       console.log(r1.data);
-      const r2 = await axios.post('http://localhost:5000/images/gfg', {
+      const r2 = await axios.post(`${server}/images/gfg`, {
         imgsUrl : [gfgUrl1, gfgUrl2],
       });
       console.log(r2.data);

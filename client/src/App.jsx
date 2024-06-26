@@ -36,11 +36,14 @@ function App() {
         /> */}
         <Route
           path="/:roomId"
-          element={<RoomPage socket={socket} user={user} roomId={roomId} />}
+          element={<RoomPage socket={socket} user={user} roomId={roomId} server={server}/>}
         />
       <Route 
         path="/admin"
-        element={<Admin/>}
+        element={<Admin
+          server = {server}
+          /> 
+        }
       />
       </Routes>
     </div>

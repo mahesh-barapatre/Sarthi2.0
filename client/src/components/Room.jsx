@@ -6,7 +6,7 @@ import Notes from "./Notes";
 import Questions from "./Questions";
 import { NavHashLink as NavLink } from 'react-router-hash-link';
 
-const RoomPage = ({socket, user, roomId}) => {
+const RoomPage = ({socket, user, roomId, server}) => {
   const [remoteSocketId, setRemoteSocketId] = useState(null);
   const [myStream, setMyStream] = useState();
   const [remoteStream, setRemoteStream] = useState();
@@ -243,8 +243,8 @@ return (
     <div className="w-full sm:w-3/4 overflow-auto h-full sm:h-screen justify-center items-center">
       <JoinRoom socket={socket} user={user} roomId={roomId} />
       <Notes socket={ socket } />
-      <Questions id={'leetcode'} type={'lc'} />
-      <Questions id={'gfg'} type={'gfg'} />
+      <Questions id={'leetcode'} type={'lc'} server={server}/>
+      <Questions id={'gfg'} type={'gfg'} server={server}/>
       
       </div>
   
