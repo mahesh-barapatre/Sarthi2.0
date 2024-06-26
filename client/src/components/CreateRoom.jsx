@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import io from "socket.io-client";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {Icon} from '@iconify/react';
 // const server = "http://localhost:5000";
 
 // var randomToken = require("random-token");
@@ -66,6 +67,10 @@ const CreateRoom = ({ setUser, socket, setRoomIdProp, server }) => {
 
   return (
   <div className="flex w-full items-center justify-center h-full min-h-screen flex-col sm:flex-row">
+    <Icon
+     className="absolute size-12 cursor-pointer hover:p-1 top-2 right-2 rounded-full bg-white p-2" icon="ri:admin-line"
+     onClick={()=>navig('/admin')}
+     />
     <div className="flex p-5 sm:p-12 flex-col items-center justify-center h-full sm:h-screen">
 
     <h1 className="w-full sm:text-start text-center">

@@ -1,11 +1,11 @@
 modification - 
 
 2. global join according to leetcode ratings --
-3. admin route to change daily questions --
+3. admin route to change daily questions -- ongoing changes -- done
 
 5. mute/unmute option --
 
 9. personal avatar --
 
-11. ai demo (solo demo) --
 12. audio bug --
+13. loader -- 

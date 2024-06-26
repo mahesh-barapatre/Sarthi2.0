@@ -1,6 +1,24 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const Questions = ({type , id}) => {
+
+  const getQuestion = async () => {
+    try {
+      const data = await axios.get(`http://localhost:5000/images/${type}`);
+      // console.log(data.data[0].url);
+      setQues(data.data[0].url);
+    } catch (error) {
+      console.log('server error:'+ error.message);
+    }
+  }
+  useEffect(()=>{
+      getQuestion();
+  },[])
+
+
+  const [ques, setQues] = useState([]);
+
   const lc = [
     'https://i.pinimg.com/originals/4d/23/55/4d235549611bdc51e15f6e49486986e0.jpg',
     'https://i.pinimg.com/originals/c3/fd/94/c3fd94d3218e668cff25528a54dca319.jpg'
@@ -22,7 +40,12 @@ const Questions = ({type , id}) => {
       <h1 className="text-3xl font-bold text-blue-900 uppercase my-4">{id} potd</h1>
       <div className="relative w-full bg-blue-300 rounded-md shadow-md">
         <img
-          src={type === 'lc' ? lc[currentImageIndex] : gfg[currentImageIndex]}
+          src={
+            ques === null ? 
+            type === 'lc' ? lc[currentImageIndex] : gfg[currentImageIndex]
+            :
+            ques[currentImageIndex]
+          }
           alt="Question"
           className="mx-auto rounded-md max-h-full object-contain"
         />

@@ -31,44 +31,55 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
 // Define a Mongoose Schema
 const Schema = mongoose.Schema;
 
-const ImgSchema = mongoose.Schema({
+const ImgSchema = new Schema({
   name: {
     type: String,
+    required: true, // Adding required validation
   },
-  url:[
-     {
-    type: String,
+  url: [
+    {
+      type: String,
+      required: true, // Adding required validation
     }
   ]
-})
+});
 
-const imgSchema = mongoose.model('ImgSchema', ImgSchema);
+const Img = mongoose.model('Img', ImgSchema);
 
-app.get('/images', async(req, res) => {
+app.get('/images/:name', async (req, res) => {
   try {
-    let data = await imgSchema.find();
-    res.status(200).json(data);
-  } catch (error) {
-    // console.log(error.message);
-    res.status(500).send('server error: ' + error.message);
-  }
-})
-
-app.post('/images', async (req, res) => { 
-  try {
-    const { name, imgs } = req.body;
-    const questions = {
-      name: name,
-      url: imgs
+    const { name } = req.params;
+    const data = await Img.find({ name: name });
+    if (data.length > 0) {
+      res.status(200).json(data);
+    } else {
+      res.status(404).send('No images found');
     }
-
-    await imgSchema.create(questions);
-    res.status(200).send('added successfully');
-    
   } catch (error) {
-    res.status(500).send('server error: ' + error.message);
+    res.status(500).send('Server error: ' + error.message);
   }
-})
+});
+
+app.post('/images/:name', async (req, res) => {
+  try {
+    const { name } = req.params;
+    const { imgsUrl } = req.body;
+
+    const existingImage = await Img.findOne({ name: name });
+    if (existingImage) {
+      // Update existing image
+      existingImage.url = imgsUrl;
+      await existingImage.save();
+      res.status(200).send('Updated successfully');
+    } else {
+      // Add new image
+      await Img.create({ name: name, url: imgsUrl });
+      res.status(201).send('Added successfully');
+    }
+  } catch (error) {
+    res.status(500).send('Server error: ' + error.message);
+  }
+});
 
 
 const RoomSchema = new Schema({
