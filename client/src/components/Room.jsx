@@ -5,6 +5,8 @@ import JoinRoom from "./JoinRoom";
 import Notes from "./Notes";
 import Questions from "./Questions";
 import { NavHashLink as NavLink } from "react-router-hash-link";
+import MagnifyingGlassLoader from "./loader/MagnifyingGlassLoader";
+import { Icon } from "@iconify/react";
 
 const RoomPage = ({ socket, user, roomId, server }) => {
   const [remoteSocketId, setRemoteSocketId] = useState(null);
@@ -160,34 +162,6 @@ const RoomPage = ({ socket, user, roomId, server }) => {
           </div>
         }
 
-        {remoteStream && (
-          <div className="">
-            <h1 className="text-lg font-bold">Remote Stream</h1>
-            <ReactPlayer
-              playing={isPlayingremoteStream}
-              muted={isPlayingremoteStream}
-              height="100px"
-              width="200px"
-              url={remoteStream}
-            />
-
-            <div className="">
-              <button
-                className=" px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={() => setIsMutedremoteStream((prev) => !prev)}
-              >
-                {isMutedremoteStream ? "Unmute" : "Mute"}
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={() => setIsPlayingremoteStream((prev) => !prev)}
-              >
-                {isPlayingremoteStream ? "Pause" : "Play"}
-              </button>
-            </div>
-          </div>
-        )}
-
         {myStream && (
           <div className="mt-4">
             <h1 className="text-lg font-bold">My Stream</h1>
@@ -199,17 +173,53 @@ const RoomPage = ({ socket, user, roomId, server }) => {
               url={myStream} // The URL of the video stream
             />
             <div className="mt-4">
-              <button
-                className="mr-2 px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={() => setIsMutedmyStream((prev) => !prev)}
-              >
-                {isMutedmyStream ? "Unmute" : "Mute"}
+              <button onClick={() => setIsMutedmyStream((prev) => !prev)}>
+                {isMutedmyStream ? (
+                  <Icon icon="fluent:mic-off-20-filled" />
+                ) : (
+                  <Icon icon="fluent:mic-20-filled" />
+                )}
               </button>
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={() => setIsPlayingmyStream((prev) => !prev)}
-              >
-                {isPlayingmyStream ? "Pause" : "Play"}
+
+              <button onClick={() => setIsPlayingmyStream((prev) => !prev)}>
+                {isPlayingmyStream ? (
+                  <Icon icon="bxs:video" />
+                ) : (
+                  <Icon icon="bxs:video-off" />
+                )}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {!remoteStream && <MagnifyingGlassLoader text={"Connecting..."} />}
+
+        {remoteStream && (
+          <div className="">
+            <h1 className="text-lg font-bold">Remote Stream</h1>
+            <ReactPlayer
+              playing={isPlayingremoteStream}
+              muted={isPlayingremoteStream}
+              height="100px"
+              width="200px"
+              url={remoteStream}
+            />
+
+            <div className="mt-4">
+              <button onClick={() => setIsMutedremoteStream((prev) => !prev)}>
+                {isMutedremoteStream ? (
+                  <Icon icon="fluent:mic-off-20-filled" />
+                ) : (
+                  <Icon icon="fluent:mic-20-filled" />
+                )}
+              </button>
+
+              <button onClick={() => setIsPlayingremoteStream((prev) => !prev)}>
+                {isPlayingremoteStream ? (
+                  <Icon icon="bxs:video" />
+                ) : (
+                  <Icon icon="bxs:video-off" />
+                )}
               </button>
             </div>
           </div>

@@ -1,11 +1,10 @@
 modification - 
 
-2. global join according to leetcode ratings --
+2. global join according to leetcode ratings -- ongoing
 3. admin route to change daily questions -- ongoing changes -- done
 
-5. mute/unmute option --
+5. mute/unmute option -- paused
 
-9. personal avatar --
-
-12. audio bug --
-13. loader -- 
+12. audio bug -- paused
+13. loader -- ongoing -- done
+14. on pause give an avatar --
