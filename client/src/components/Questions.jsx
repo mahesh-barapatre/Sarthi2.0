@@ -6,7 +6,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 const Questions = ({ type, id, server }) => {
   const getQuestion = async () => {
     try {
-      const data = await axios.get(`http://localhost:5000/images/${type}`);
+      const data = await axios.get(`${server}/images/${type}`);
       // console.log(data.data[0].url);
       setQues(data.data[0].url);
       // setQues(null);
