@@ -2,8 +2,9 @@ import React, { useState, useRef } from "react";
 import WhiteBoard from "./WhiteBoard";
 import ToolRadioButton from "./ToolRadioButton";
 import Button from "./Button";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
-const JoinRoom = ({socket,user,roomId}) => {
+const JoinRoom = ({ socket, user, roomId }) => {
   const [tool, setTool] = useState("");
   const [color, setColor] = useState("black");
   const [elements, setElements] = useState([]);
@@ -24,12 +25,12 @@ const JoinRoom = ({socket,user,roomId}) => {
     console.log(history);
 
     if (history.length >= 1) {
-        console.log('Entered');
+      console.log("Entered");
       setElements((prev) => [...prev, history[history.length - 1]]);
       const newitem = history;
       newitem.pop();
-      if(newitem.length){
-          setHistory([...newitem]);
+      if (newitem.length) {
+        setHistory([...newitem]);
       }
     }
   };
@@ -43,45 +44,68 @@ const JoinRoom = ({socket,user,roomId}) => {
   };
 
   return (
-    <div id="whiteboard" className="w-full bg-red-600 h-screen overflow-hidden flex flex-col">
-  <div className="flex justify-between items-center border-gray-300 border-2 bg-gray-100 p-3 shadow-lg">
-    <div className="flex flex-col gap-5 mx-5 xl:flex-row text-xl">
-      <ToolRadioButton tool="pencil" currentTool={tool} setTool={setTool}>Pencil</ToolRadioButton>
-      <ToolRadioButton tool="line" currentTool={tool} setTool={setTool}>Line</ToolRadioButton>
-      <ToolRadioButton tool="rect" currentTool={tool} setTool={setTool}>Rectangle</ToolRadioButton>
+    <div
+      id="whiteboard"
+      className="w-full bg-red-600 h-screen overflow-hidden flex flex-col"
+    >
+      <div className="flex sm:flex-row flex-col space-y-2 justify-between items-center border-gray-300 border-2 bg-gray-100 p-3 shadow-lg">
+        <div className="flex gap-5 mx-5 xl:flex-row text-xl">
+          <ToolRadioButton tool="pencil" currentTool={tool} setTool={setTool}>
+            Pencil
+            <Icon icon="ion:pencil-sharp" width={20} />
+          </ToolRadioButton>
+          <ToolRadioButton tool="line" currentTool={tool} setTool={setTool}>
+            Line
+            <Icon icon="uil:line-alt" width={20} />
+          </ToolRadioButton>
+          <ToolRadioButton tool="rect" currentTool={tool} setTool={setTool}>
+            Rectangle
+            <Icon icon="material-symbols:rectangle-outline" width={20} />
+          </ToolRadioButton>
+        </div>
+        <div className="flex items-center">
+          <label className="mr-2 text-sm font-bold">Select Color:</label>
+          <div className="overflow-hidden w-7 h-5">
+            <input
+              type="color"
+              name="color"
+              id="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="flex ml-4 gap-3">
+          <button
+            onClick={undo}
+            className="font-bold bg-blue-500 hover:bg-blue-600 p-1 text-white rounded"
+          >
+            Undo
+          </button>
+          {/* <Button onClick={Redo} className="border border-blue-500 text-blue-500 w-24 h-10 rounded-lg">Redo</Button> */}
+          <button
+            onClick={clearCanvas}
+            className="font-bold bg-red-500 hover:bg-red-600 p-1 text-white rounded"
+          >
+            Clear Canvas
+          </button>
+        </div>
+      </div>
+      <div className="">
+        <WhiteBoard
+          socket={socket}
+          user={user}
+          canvasRef={canvasRef}
+          ctxRef={ctxRef}
+          elements={elements}
+          setElements={setElements}
+          tool={tool}
+          color={color}
+          roomId={roomId}
+          className=""
+        />
+      </div>
     </div>
-    <div className="flex items-center">
-      <label className="mr-2">Select Color:</label>
-      <input
-        type="color"
-        name="color"
-        id="color"
-        value={color}
-        onChange={(e) => setColor(e.target.value)}
-      />
-    </div>
-    <div className="flex ml-4 gap-3">
-      <Button onClick={undo} className="bg-blue-500 text-white w-24 h-10 rounded-lg">Undo</Button>
-      {/* <Button onClick={Redo} className="border border-blue-500 text-blue-500 w-24 h-10 rounded-lg">Redo</Button> */}
-      <Button onClick={clearCanvas} className="bg-red-600 text-white w-32 h-10 rounded-lg">Clear Canvas</Button>
-    </div>
-  </div>
-  <div className="">
-    <WhiteBoard
-      socket={socket}
-      user={user}
-      canvasRef={canvasRef}
-      ctxRef={ctxRef}
-      elements={elements}
-      setElements={setElements}
-      tool={tool}
-      color={color}
-      roomId={roomId}
-      className=""
-    />
-  </div>
-</div>
-
   );
 };
 

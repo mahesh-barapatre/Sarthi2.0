@@ -7,14 +7,18 @@ import Questions from "./Questions";
 import { NavHashLink as NavLink } from "react-router-hash-link";
 import MagnifyingGlassLoader from "./loader/MagnifyingGlassLoader";
 import { Icon } from "@iconify/react";
+import OnPauseScreen from "./OnPauseScreen";
 
 const RoomPage = ({ socket, user, roomId, server }) => {
   const [remoteSocketId, setRemoteSocketId] = useState(null);
   const [myStream, setMyStream] = useState();
   const [remoteStream, setRemoteStream] = useState();
 
+  const [other, setOther] = useState("connecting...");
+
   const handleUserJoined = useCallback(({ user, id }) => {
     console.log(`user ${user} joined room`);
+    setOther(user);
     setRemoteSocketId(id);
   }, []);
 
@@ -24,12 +28,13 @@ const RoomPage = ({ socket, user, roomId, server }) => {
       video: true,
     });
     const offer = await peer.getOffer();
-    socket.emit("user:call", { to: remoteSocketId, offer });
+    socket.emit("user:call", { name: user, to: remoteSocketId, offer });
     setMyStream(stream);
   }, [remoteSocketId, socket]);
 
   const handleIncommingCall = useCallback(
-    async ({ from, offer }) => {
+    async ({ name, from, offer }) => {
+      setOther(name);
       setRemoteSocketId(from);
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: true,
@@ -38,7 +43,7 @@ const RoomPage = ({ socket, user, roomId, server }) => {
       setMyStream(stream);
       console.log(`Incoming Call`, from, offer);
       const ans = await peer.getAnswer(offer);
-      socket.emit("call:accepted", { to: from, ans });
+      socket.emit("call:accepted", { receiver: { user }, to: from, ans });
     },
     [socket]
   );
@@ -122,7 +127,7 @@ const RoomPage = ({ socket, user, roomId, server }) => {
     handleNegoNeedFinal,
   ]);
 
-  const [sec, setSec] = useState("wb");
+  // const [sec, setSec] = useState("wb");
 
   const [isMutedmyStream, setIsMutedmyStream] = useState(true);
   const [isPlayingmyStream, setIsPlayingmyStream] = useState(true);
@@ -137,15 +142,15 @@ const RoomPage = ({ socket, user, roomId, server }) => {
           // !remoteStream
           //   &&
 
-          <div className="p-4 border text-center shadow-md transition-transform transform hover:shadow-lg bg-gray-100 rounded-lg">
-            <h4 className="font-bold text-xl">
+          <div className="text-center flex">
+            <h4 className="text-xl">
               {remoteSocketId ? "Connected" : "No one in room"}
             </h4>
-            <div className="mt-4 space-x-2">
+            <div className="">
               {myStream && (
                 <button
                   onClick={sendStreams}
-                  className="button bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                  className="font-bold bg-blue-500 hover:bg-blue-600 text-white p-1 rounded"
                 >
                   Send Stream
                 </button>
@@ -153,7 +158,7 @@ const RoomPage = ({ socket, user, roomId, server }) => {
               {!myStream && remoteSocketId && (
                 <button
                   onClick={handleCallUser}
-                  className="button bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded"
+                  className="font-bold bg-blue-500 hover:bg-blue-600 text-white p-1 rounded"
                 >
                   Call
                 </button>
@@ -164,29 +169,49 @@ const RoomPage = ({ socket, user, roomId, server }) => {
 
         {myStream && (
           <div className="mt-4">
-            <h1 className="text-lg font-bold">My Stream</h1>
-            <ReactPlayer
-              playing={isPlayingmyStream} // The video is set to play automatically
-              muted={isMutedmyStream} // The video is muted by default
-              height="100px"
-              width="200px"
-              url={myStream} // The URL of the video stream
-            />
-            <div className="mt-4">
-              <button onClick={() => setIsMutedmyStream((prev) => !prev)}>
+            <h1 className="text-sm font-bold">{user}</h1>
+            <div className="min-h-[100px] min-w-[200px]">
+              {isPlayingmyStream ? (
+                <ReactPlayer
+                  playing={isPlayingmyStream} // The video is set to play automatically
+                  muted={isMutedmyStream} // The video is muted by default
+                  height="100px"
+                  width="200px"
+                  url={myStream} // The URL of the video stream
+                />
+              ) : (
+                <OnPauseScreen name={user} theme={"white"} />
+              )}
+            </div>
+
+            <div className="mt-4 flex justify-evenly">
+              <button
+                className="p-1 rounded-full bg-white text-purple-500"
+                onClick={() => setIsMutedmyStream((prev) => !prev)}
+              >
                 {isMutedmyStream ? (
-                  <Icon icon="fluent:mic-off-20-filled" />
+                  <Icon icon="fluent:mic-off-20-filled" width={25} />
                 ) : (
-                  <Icon icon="fluent:mic-20-filled" />
+                  <Icon icon="fluent:mic-20-filled" width={25} />
                 )}
               </button>
 
-              <button onClick={() => setIsPlayingmyStream((prev) => !prev)}>
+              <button
+                className="p-1 rounded-full bg-white text-purple-500"
+                onClick={() => setIsPlayingmyStream((prev) => !prev)}
+              >
                 {isPlayingmyStream ? (
-                  <Icon icon="bxs:video" />
+                  <Icon icon="bxs:video" width={25} />
                 ) : (
-                  <Icon icon="bxs:video-off" />
+                  <Icon icon="bxs:video-off" width={25} />
                 )}
+              </button>
+
+              <button
+                className="p-2 rounded-full bg-red-600 text-white font-bold"
+                // onClick={() => setIsPlayingmyStream((prev) => !prev)}
+              >
+                <Icon icon="tdesign:call-off" width={19} />
               </button>
             </div>
           </div>
@@ -196,29 +221,41 @@ const RoomPage = ({ socket, user, roomId, server }) => {
 
         {remoteStream && (
           <div className="">
-            <h1 className="text-lg font-bold">Remote Stream</h1>
-            <ReactPlayer
-              playing={isPlayingremoteStream}
-              muted={isPlayingremoteStream}
-              height="100px"
-              width="200px"
-              url={remoteStream}
-            />
+            <h1 className="text-sm font-bold">{other}</h1>
+            <div className="min-h-[100px] min-w-[200px]">
+              {isPlayingremoteStream ? (
+                <ReactPlayer
+                  playing={isPlayingremoteStream}
+                  muted={isPlayingremoteStream}
+                  height="100px"
+                  width="200px"
+                  url={remoteStream}
+                />
+              ) : (
+                <OnPauseScreen name={other} theme={"purple-500"} />
+              )}
+            </div>
 
-            <div className="mt-4">
-              <button onClick={() => setIsMutedremoteStream((prev) => !prev)}>
+            <div className="mt-4 flex justify-evenly">
+              <button
+                className="p-1 rounded-full bg-white text-purple-500"
+                onClick={() => setIsMutedremoteStream((prev) => !prev)}
+              >
                 {isMutedremoteStream ? (
-                  <Icon icon="fluent:mic-off-20-filled" />
+                  <Icon icon="fluent:mic-off-20-filled" width={25} />
                 ) : (
-                  <Icon icon="fluent:mic-20-filled" />
+                  <Icon icon="fluent:mic-20-filled" width={25} />
                 )}
               </button>
 
-              <button onClick={() => setIsPlayingremoteStream((prev) => !prev)}>
+              <button
+                className="p-1 rounded-full bg-white text-purple-500"
+                onClick={() => setIsPlayingremoteStream((prev) => !prev)}
+              >
                 {isPlayingremoteStream ? (
-                  <Icon icon="bxs:video" />
+                  <Icon icon="bxs:video" width={25} />
                 ) : (
-                  <Icon icon="bxs:video-off" />
+                  <Icon icon="bxs:video-off" width={25} />
                 )}
               </button>
             </div>

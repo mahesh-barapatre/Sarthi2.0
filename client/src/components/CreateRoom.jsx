@@ -38,6 +38,7 @@ const CreateRoom = ({ setUser, socket, setRoomIdProp, server }) => {
     }
 
     socket.emit("userJoined", {
+      name: nameJoin,
       roomId: joinRoom,
     });
     setUser(nameJoin);
@@ -55,6 +56,7 @@ const CreateRoom = ({ setUser, socket, setRoomIdProp, server }) => {
     const roomNum = await axios.get(`${server}/check`);
     console.log(roomNum.data.roomNum);
     socket.emit("userJoined", {
+      name: nameJoin,
       roomId: roomNum.data.roomId,
     });
     setUser(nameJoin);
@@ -65,11 +67,11 @@ const CreateRoom = ({ setUser, socket, setRoomIdProp, server }) => {
   return (
     <div className="flex w-full items-center justify-center h-full min-h-screen flex-col sm:flex-row">
       <Icon
-        className="absolute size-12 cursor-pointer hover:p-1 top-2 right-2 rounded-full bg-white p-2"
+        className="absolute size-12 transition-all duration-300 cursor-pointer hover:p-1 top-2 right-2 rounded-full bg-white p-2"
         icon="ri:admin-line"
         onClick={() => navig("/admin")}
       />
-      <div className="flex p-5 sm:p-12 flex-col items-center justify-center h-full sm:h-screen">
+      <div className="flex p-5 sm:p-9 sm:w-2/3 flex-col items-center justify-center h-full sm:h-screen">
         <h1 className="w-full sm:text-start text-center">
           <span className="text-6xl sm:text-9xl font-bold text-blue-600 mb-6">
             Sarthi
@@ -88,11 +90,11 @@ const CreateRoom = ({ setUser, socket, setRoomIdProp, server }) => {
           <span className="text-3xl sm:text-5xl font-bold text-black sm:mb-6">
             Collaborate,
           </span>
-          <span className="text-4xl sm:text-7xl font-bold text-purple-500 sm:mb-6">
+          <span className="text-5xl sm:text-7xl font-bold text-purple-500 sm:mb-6">
             Innovate,
           </span>
           <span className="text-3xl sm:text-5xl font-bold text-green-500 mb-6">
-            Succeed
+            Succeed...
           </span>
         </h2>
 

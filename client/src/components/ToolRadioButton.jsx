@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const ToolRadioButton = ({ tool, currentTool, setTool, children }) => {
   const isSelected = currentTool === tool;
@@ -6,7 +6,9 @@ const ToolRadioButton = ({ tool, currentTool, setTool, children }) => {
   return (
     <div className="flex flex-row gap-1 items-center">
       <label
-        className={`font-semibold ${isSelected ? 'text-green-500' : ''}`}
+        className={`font-semibold ${
+          isSelected ? "text-green-500" : ""
+        } text-xs flex`}
       >
         {children}
       </label>
