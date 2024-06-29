@@ -1,0 +1,37 @@
+websocket connection to be established
+
+////////////////////////////////
+////////////////////////////////
+
+when the other user join the room -
+    make a new webrtc connection
+    make a new offer -> (self description)
+    setLocalDescription(offer);
+signaling => sending offer to other user
+signaling through websockets
+
+other user-
+    setRemoteDescription(offer);
+    make an answer 
+    setLocalDescription(answer);
+    send offer through websockets
+
+1st User-
+    setRemoteDescription(answer);
+
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+        WEBRTC connection established
+
+//on 2nd user join - 
+    make a local stream
+    send this stream to other user using tracks
+    getRemote stream using eventListeners"tracks"
+
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+        NEGOTIATION - security check
+            -reconecting the users
+            -repeat signaling process
+
+

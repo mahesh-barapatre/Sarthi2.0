@@ -1,12 +1,13 @@
 modification - 
-1. leetcode api insertion
-2. global join according to leetcode ratings
-3. admin route to change daily questions
-4. select question for user to discuss
-5. mute/unmute option
-6. sharing documents/files
-7. emojis
-8. polls
-9. personal avatar
-10. login/profile
-11. 
+
+2. global join according to leetcode ratings -- paused => due to low user active -
+=> if many easy users are there the average user is neglected
+=> future update
+3. admin route to change daily questions -- ongoing changes -- done
+
+5. mute/unmute option -- paused
+
+12. audio bug -- paused
+13. loader -- ongoing -- done
+14. on pause give an avatar --ongoing -- done
+15. info btn at every page
